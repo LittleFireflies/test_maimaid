@@ -12,4 +12,10 @@ class UserRepositoryImpl extends UserRepository {
   Future<void> registerUser(User user) async {
     _localDataSource.registerUser(user);
   }
+
+  @override
+  Future<void> login(User user) {
+    // TODO: implement login
+    throw UnimplementedError();
+  }
 }
