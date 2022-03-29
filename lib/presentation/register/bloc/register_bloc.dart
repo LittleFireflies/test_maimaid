@@ -54,7 +54,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     RegisterNameChanged event,
     Emitter<RegisterState> emit,
   ) {
-    final name = Name.dirty(value: event.name);
+    final name = Name.dirty(event.name);
 
     emit(
       state.copyWith(
@@ -69,7 +69,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     RegisterEmailChanged event,
     Emitter<RegisterState> emit,
   ) {
-    final email = Email.dirty(value: event.email);
+    final email = Email.dirty(event.email);
 
     emit(
       state.copyWith(
@@ -84,13 +84,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     RegisterPasswordChanged event,
     Emitter<RegisterState> emit,
   ) {
-    final password = Password.dirty(value: event.password);
+    final password = Password.dirty(event.password);
 
     emit(
       state.copyWith(
         password: password,
         status: Formz.validate([password, state.name, state.email]),
-        passwordError: password.invalid ? 'Password can not be empty' : null,
+        passwordError: password.invalid ? 'Password can not be empty!' : null,
       ),
     );
   }

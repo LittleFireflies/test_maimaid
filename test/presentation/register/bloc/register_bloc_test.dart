@@ -10,12 +10,19 @@ import 'package:test_maimaid/presentation/register/models/email.dart';
 import 'package:test_maimaid/presentation/register/models/name.dart';
 import 'package:test_maimaid/presentation/register/models/password.dart';
 
+import '../../../helpers/models.dart';
+
 class MockRegisterUser extends Mock implements RegisterUser {}
 
 void main() {
   group('RegisterBloc', () {
     late RegisterUser registerUser;
     late RegisterBloc bloc;
+
+    const user = TestModels.user;
+    final name = user.name;
+    final email = user.email;
+    final password = user.password;
 
     setUp(() {
       registerUser = MockRegisterUser();
@@ -31,7 +38,7 @@ void main() {
         expect: () => [
           const RegisterState(
             status: FormzStatus.invalid,
-            name: Name.dirty(value: ''),
+            name: Name.dirty(''),
             nameError: 'Name can not be empty!',
           )
         ],
@@ -45,7 +52,7 @@ void main() {
         expect: () => [
           const RegisterState(
             status: FormzStatus.invalid,
-            email: Email.dirty(value: ''),
+            email: Email.dirty(''),
             emailError: 'Email can not be empty!',
           )
         ],
@@ -59,7 +66,7 @@ void main() {
         expect: () => [
           const RegisterState(
             status: FormzStatus.invalid,
-            email: Email.dirty(value: 'random_email'),
+            email: Email.dirty('random_email'),
             emailError: 'Email format invalid!',
           )
         ],
@@ -73,11 +80,103 @@ void main() {
         expect: () => [
           const RegisterState(
             status: FormzStatus.invalid,
-            password: Password.dirty(value: ''),
+            password: Password.dirty(''),
             passwordError: 'Password can not be empty!',
           )
         ],
       );
     });
+
+    blocTest<RegisterBloc, RegisterState>(
+      'emit valid state when '
+      'all forms are inputted '
+      'and register success',
+      setUp: () {
+        when(() => registerUser.execute(user))
+            .thenAnswer((invocation) => Future.value());
+      },
+      build: () => bloc,
+      act: (bloc) => bloc
+        ..add(RegisterNameChanged(name))
+        ..add(RegisterEmailChanged(email))
+        ..add(RegisterPasswordChanged(password))
+        ..add(const RegisterSubmitted()),
+      expect: () => [
+        RegisterState(
+          name: Name.dirty(name),
+          status: FormzStatus.invalid,
+        ),
+        RegisterState(
+          name: Name.dirty(name),
+          email: Email.dirty(email),
+          status: FormzStatus.invalid,
+        ),
+        RegisterState(
+          name: Name.dirty(name),
+          email: Email.dirty(email),
+          password: Password.dirty(password),
+          status: FormzStatus.valid,
+        ),
+        RegisterState(
+          name: Name.dirty(name),
+          email: Email.dirty(email),
+          password: Password.dirty(password),
+          status: FormzStatus.submissionInProgress,
+        ),
+        RegisterState(
+          name: Name.dirty(name),
+          email: Email.dirty(email),
+          password: Password.dirty(password),
+          status: FormzStatus.submissionSuccess,
+        ),
+      ],
+    );
+
+    final exception = Exception('Error!');
+
+    blocTest<RegisterBloc, RegisterState>(
+      'emit valid state when '
+      'all forms are inputted '
+      'and error occurred',
+      setUp: () {
+        when(() => registerUser.execute(user)).thenThrow(exception);
+      },
+      build: () => bloc,
+      act: (bloc) => bloc
+        ..add(RegisterNameChanged(name))
+        ..add(RegisterEmailChanged(email))
+        ..add(RegisterPasswordChanged(password))
+        ..add(const RegisterSubmitted()),
+      expect: () => [
+        RegisterState(
+          name: Name.dirty(name),
+          status: FormzStatus.invalid,
+        ),
+        RegisterState(
+          name: Name.dirty(name),
+          email: Email.dirty(email),
+          status: FormzStatus.invalid,
+        ),
+        RegisterState(
+          name: Name.dirty(name),
+          email: Email.dirty(email),
+          password: Password.dirty(password),
+          status: FormzStatus.valid,
+        ),
+        RegisterState(
+          name: Name.dirty(name),
+          email: Email.dirty(email),
+          password: Password.dirty(password),
+          status: FormzStatus.submissionInProgress,
+        ),
+        RegisterState(
+          name: Name.dirty(name),
+          email: Email.dirty(email),
+          password: Password.dirty(password),
+          status: FormzStatus.submissionFailure,
+          registerError: exception.toString(),
+        ),
+      ],
+    );
   });
 }
