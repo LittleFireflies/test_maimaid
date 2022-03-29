@@ -7,6 +7,7 @@ import 'package:test_maimaid/presentation/login/bloc/login_bloc.dart';
 import 'package:test_maimaid/presentation/login/bloc/login_event.dart';
 import 'package:test_maimaid/presentation/login/bloc/login_state.dart';
 import 'package:test_maimaid/presentation/register/models/email.dart';
+import 'package:test_maimaid/presentation/register/models/password.dart';
 
 class MockLogin extends Mock implements Login {}
 
@@ -49,5 +50,19 @@ void main() {
         ],
       );
     });
+
+    blocTest<LoginBloc, LoginState>(
+      'emits password empty error '
+      'when password is empty',
+      build: () => bloc,
+      act: (bloc) => bloc.add(const LoginPasswordChanged('')),
+      expect: () => [
+        const LoginState(
+          status: FormzStatus.invalid,
+          password: Password.dirty(''),
+          passwordError: 'Password can not be empty!',
+        )
+      ],
+    );
   });
 }
