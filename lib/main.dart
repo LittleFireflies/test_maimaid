@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:test_maimaid/data/local_storage/local_data_source.dart';
 import 'package:test_maimaid/data/models/user_model.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          textTheme: GoogleFonts.interTextTheme(),
         ),
         home: RegisterPage(),
       ),
