@@ -4,6 +4,7 @@ import 'package:test_maimaid/domain/entities/user.dart';
 
 abstract class LocalDataSource {
   void registerUser(User user);
+  Future<bool> login(User user);
 }
 
 class UserHive extends LocalDataSource {
@@ -24,5 +25,12 @@ class UserHive extends LocalDataSource {
 
   factory UserHive.create({required Box<UserModel> userBox}) {
     return UserHive._(userBox);
+  }
+
+  @override
+  Future<bool> login(User user) async {
+    final userModel = userBox.get(user.email);
+
+    return userModel != null;
   }
 }

@@ -14,8 +14,7 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<void> login(User user) {
-    // TODO: implement login
-    throw UnimplementedError();
+  Future<bool> login(User user) async {
+    return await _localDataSource.login(user);
   }
 }
