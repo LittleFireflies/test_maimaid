@@ -4,7 +4,7 @@ import 'package:test_maimaid/domain/entities/user.dart';
 import 'package:test_maimaid/utils/exceptions.dart';
 
 abstract class LocalDataSource {
-  void registerUser(User user);
+  Future<void> registerUser(User user);
   Future<User> login(String email, password);
 }
 
@@ -15,13 +15,19 @@ class UserHive extends LocalDataSource {
   UserHive._(this.userBox);
 
   @override
-  void registerUser(User user) async {
-    final userModel = UserModel(
-      name: user.name,
-      email: user.email,
-      password: user.password,
-    );
-    await userBox.put(user.email, userModel);
+  Future<void> registerUser(User user) async {
+    final userOrNull = userBox.get(user.email);
+
+    if (userOrNull == null) {
+      final userModel = UserModel(
+        name: user.name,
+        email: user.email,
+        password: user.password,
+      );
+      await userBox.put(user.email, userModel);
+    } else {
+      throw const UserAlreadyExistException();
+    }
   }
 
   factory UserHive.create({required Box<UserModel> userBox}) {

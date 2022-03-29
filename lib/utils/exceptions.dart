@@ -12,6 +12,11 @@ abstract class AppException extends Equatable implements Exception {
   List<Object?> get props => [message];
 }
 
+class UserAlreadyExistException extends AppException {
+  const UserAlreadyExistException({String message = 'User already exist'})
+      : super(message);
+}
+
 class UserNotFoundException extends AppException {
   const UserNotFoundException({String message = 'User not found'})
       : super(message);

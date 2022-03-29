@@ -10,7 +10,7 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<void> registerUser(User user) async {
-    _localDataSource.registerUser(user);
+    await _localDataSource.registerUser(user);
   }
 
   @override
