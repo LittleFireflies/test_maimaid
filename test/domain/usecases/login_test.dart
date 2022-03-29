@@ -13,6 +13,8 @@ void main() {
     late Login usecase;
 
     const user = TestModels.user;
+    final email = user.email;
+    final password = user.password;
 
     setUp(() {
       repository = MockRepository();
@@ -24,12 +26,12 @@ void main() {
       'when use case executed',
       () async {
         // arrange
-        when(() => repository.login(user))
+        when(() => repository.login(email, password))
             .thenAnswer((invocation) => Future.value());
         // act
-        await usecase.execute(user);
+        await usecase.execute(email, password);
         // assert
-        verify(() => repository.login(user)).called(1);
+        verify(() => repository.login(email, password)).called(1);
       },
     );
   });

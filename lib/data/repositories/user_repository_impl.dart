@@ -14,7 +14,7 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<bool> login(User user) async {
-    return await _localDataSource.login(user);
+  Future<bool> login(String email, String password) async {
+    return await _localDataSource.login(email, password);
   }
 }

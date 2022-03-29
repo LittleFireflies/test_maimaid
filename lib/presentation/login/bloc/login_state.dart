@@ -9,6 +9,7 @@ class LoginState extends Equatable {
   final Password password;
   final String? emailError;
   final String? passwordError;
+  final String? loginError;
 
   const LoginState({
     this.status = FormzStatus.pure,
@@ -16,6 +17,7 @@ class LoginState extends Equatable {
     this.password = const Password.pure(),
     this.emailError,
     this.passwordError,
+    this.loginError,
   });
 
   LoginState copyWith({
@@ -24,6 +26,7 @@ class LoginState extends Equatable {
     Password? password,
     String? emailError,
     String? passwordError,
+    String? loginError,
   }) {
     return LoginState(
       status: status ?? this.status,
@@ -31,6 +34,7 @@ class LoginState extends Equatable {
       password: password ?? this.password,
       emailError: emailError,
       passwordError: passwordError,
+      loginError: loginError,
     );
   }
 
@@ -41,5 +45,6 @@ class LoginState extends Equatable {
         password,
         emailError,
         passwordError,
+        loginError,
       ];
 }

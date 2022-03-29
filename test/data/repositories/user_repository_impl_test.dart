@@ -13,6 +13,8 @@ void main() {
     late UserRepositoryImpl repository;
 
     const user = TestModels.user;
+    final email = user.email;
+    final password = user.password;
 
     setUp(() {
       localDataSource = MockLocalDataSource();
@@ -32,12 +34,13 @@ void main() {
         'when user found',
         () async {
           // arrange
-          when(() => localDataSource.login(user)).thenAnswer((_) async => true);
+          when(() => localDataSource.login(email, password))
+              .thenAnswer((_) async => true);
           // act
-          final result = await repository.login(user);
+          final result = await repository.login(email, password);
           // assert
           expect(result, true);
-          verify(() => localDataSource.login(user));
+          verify(() => localDataSource.login(email, password));
         },
       );
 
@@ -46,13 +49,13 @@ void main() {
         'when user not found',
         () async {
           // arrange
-          when(() => localDataSource.login(user))
+          when(() => localDataSource.login(email, password))
               .thenAnswer((_) async => false);
           // act
-          final result = await repository.login(user);
+          final result = await repository.login(email, password);
           // assert
           expect(result, false);
-          verify(() => localDataSource.login(user));
+          verify(() => localDataSource.login(email, password));
         },
       );
     });

@@ -6,7 +6,7 @@ class Login {
 
   const Login(UserRepository repository) : _repository = repository;
 
-  Future<void> execute(User user) async {
-    await _repository.login(user);
+  Future<void> execute(String email, String password) async {
+    await _repository.login(email, password);
   }
 }

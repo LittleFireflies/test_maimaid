@@ -15,6 +15,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginEmailChanged>((event, emit) => _onLoginEmailChanged(event, emit));
     on<LoginPasswordChanged>(
         (event, emit) => _onLoginPasswordChanged(event, emit));
+    on<LoginSubmitted>((event, emit) => _onLoginSubmitted(event, emit));
   }
 
   void _onLoginEmailChanged(LoginEmailChanged event, Emitter<LoginState> emit) {
@@ -40,6 +41,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         passwordError: password.invalid ? 'Password can not be empty!' : null,
       ),
     );
+  }
+
+  void _onLoginSubmitted(LoginSubmitted event, Emitter<LoginState> emit) async {
+    if (state.status.isValidated) {
+      emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+      try {
+        await _login.execute(
+          state.email.value,
+          state.password.value,
+        );
+
+        emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      } catch (e) {
+        emit(
+          state.copyWith(
+            status: FormzStatus.submissionFailure,
+            loginError: e.toString(),
+          ),
+        );
+      }
+    }
   }
 }
 

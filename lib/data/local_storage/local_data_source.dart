@@ -4,7 +4,7 @@ import 'package:test_maimaid/domain/entities/user.dart';
 
 abstract class LocalDataSource {
   void registerUser(User user);
-  Future<bool> login(User user);
+  Future<bool> login(String email, password);
 }
 
 class UserHive extends LocalDataSource {
@@ -28,8 +28,8 @@ class UserHive extends LocalDataSource {
   }
 
   @override
-  Future<bool> login(User user) async {
-    final userModel = userBox.get(user.email);
+  Future<bool> login(String email, password) async {
+    final userModel = userBox.get(email);
 
     return userModel != null;
   }
