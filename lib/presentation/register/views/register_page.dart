@@ -5,6 +5,7 @@ import 'package:test_maimaid/domain/repositories/user_repository.dart';
 import 'package:test_maimaid/domain/usecases/register_user.dart';
 import 'package:test_maimaid/presentation/register/bloc/register_bloc.dart';
 import 'package:test_maimaid/presentation/register/bloc/register_event.dart';
+import 'package:test_maimaid/presentation/register/bloc/register_state.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({Key? key}) : super(key: key);
@@ -31,42 +32,50 @@ class RegisterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Text('Register'),
-              Text('Full Name'),
-              TextField(
-                controller: _nameController,
-              ),
-              Text('Email'),
-              TextField(
-                controller: _emailController,
-              ),
-              Text('Password'),
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  context.read<RegisterBloc>().add(
-                        RegisterUserEvent(
-                          name: _nameController.text,
-                          email: _emailController.text,
-                          password: _passwordController.text,
-                        ),
-                      );
-                },
-                child: Text('Register'),
-              ),
-            ],
+    return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
+      return Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Text('Register'),
+                Text('Full Name'),
+                TextField(
+                  onChanged: (name) => context
+                      .read<RegisterBloc>()
+                      .add(RegisterNameChanged(name)),
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    errorText: state.nameError,
+                  ),
+                ),
+                Text('Email'),
+                TextField(
+                  controller: _emailController,
+                ),
+                Text('Password'),
+                TextField(
+                  controller: _passwordController,
+                  obscureText: true,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<RegisterBloc>().add(
+                          RegisterSubmitted(
+                            name: _nameController.text,
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          ),
+                        );
+                  },
+                  child: Text('Register'),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
