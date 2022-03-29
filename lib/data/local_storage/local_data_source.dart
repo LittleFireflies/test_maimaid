@@ -1,10 +1,11 @@
 import 'package:hive/hive.dart';
 import 'package:test_maimaid/data/models/user_model.dart';
 import 'package:test_maimaid/domain/entities/user.dart';
+import 'package:test_maimaid/utils/exceptions.dart';
 
 abstract class LocalDataSource {
   void registerUser(User user);
-  Future<bool> login(String email, password);
+  Future<User> login(String email, password);
 }
 
 class UserHive extends LocalDataSource {
@@ -28,9 +29,13 @@ class UserHive extends LocalDataSource {
   }
 
   @override
-  Future<bool> login(String email, password) async {
+  Future<User> login(String email, password) async {
     final userModel = userBox.get(email);
 
-    return userModel != null;
+    if (userModel != null) {
+      return userModel.toEntity();
+    } else {
+      throw const UserNotFoundException();
+    }
   }
 }

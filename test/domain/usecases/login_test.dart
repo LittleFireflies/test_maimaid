@@ -27,7 +27,7 @@ void main() {
       () async {
         // arrange
         when(() => repository.login(email, password))
-            .thenAnswer((invocation) => Future.value());
+            .thenAnswer((_) async => user);
         // act
         await usecase.execute(email, password);
         // assert

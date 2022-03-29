@@ -25,39 +25,17 @@ void main() {
       // act
       repository.registerUser(user);
       // assert
-      verify(() => localDataSource.registerUser(user));
+      verify(() => localDataSource.registerUser(user)).called(1);
     });
 
-    group('login', () {
-      test(
-        'return true '
-        'when user found',
-        () async {
-          // arrange
-          when(() => localDataSource.login(email, password))
-              .thenAnswer((_) async => true);
-          // act
-          final result = await repository.login(email, password);
-          // assert
-          expect(result, true);
-          verify(() => localDataSource.login(email, password));
-        },
-      );
-
-      test(
-        'return false '
-        'when user not found',
-        () async {
-          // arrange
-          when(() => localDataSource.login(email, password))
-              .thenAnswer((_) async => false);
-          // act
-          final result = await repository.login(email, password);
-          // assert
-          expect(result, false);
-          verify(() => localDataSource.login(email, password));
-        },
-      );
+    test('verify localDataSource.login', () {
+      // arrange
+      when(() => localDataSource.login(email, password))
+          .thenAnswer((_) async => user);
+      // act
+      repository.login(email, password);
+      // assert
+      verify(() => localDataSource.login(email, password)).called(1);
     });
   });
 }
