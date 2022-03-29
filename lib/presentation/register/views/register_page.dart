@@ -32,56 +32,60 @@ class RegisterView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
       return Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Register',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 28.0),
-                const Text('Full Name'),
-                AppTextField(
-                  onChanged: (name) => context
-                      .read<RegisterBloc>()
-                      .add(RegisterNameChanged(name)),
-                  errorText: state.nameError,
-                  prefixIcon: const Icon(Icons.person),
-                ),
-                const SizedBox(height: 28.0),
-                const Text('Email'),
-                AppTextField(
-                  onChanged: (email) => context
-                      .read<RegisterBloc>()
-                      .add(RegisterEmailChanged(email)),
-                  textInputType: TextInputType.emailAddress,
-                  errorText: state.emailError,
-                  prefixIcon: const Icon(Icons.email),
-                ),
-                const SizedBox(height: 28.0),
-                const Text('Password'),
-                AppTextField(
-                  onChanged: (password) => context
-                      .read<RegisterBloc>()
-                      .add(RegisterPasswordChanged(password)),
-                  errorText: state.passwordError,
-                  prefixIcon: const Icon(Icons.lock),
-                  textInputAction: TextInputAction.done,
-                  obscureText: true,
-                ),
-                const SizedBox(height: 28.0),
-                AppButton(
-                  onPressed: () {
-                    context.read<RegisterBloc>().add(const RegisterSubmitted());
-                  },
-                  inProgress: state.status.isSubmissionInProgress,
-                  enabled: state.status.isValidated,
-                  child: const Text('Register'),
-                ),
-              ],
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Register',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 28.0),
+                  const Text('Full Name'),
+                  AppTextField(
+                    onChanged: (name) => context
+                        .read<RegisterBloc>()
+                        .add(RegisterNameChanged(name)),
+                    errorText: state.nameError,
+                    prefixIcon: const Icon(Icons.person),
+                  ),
+                  const SizedBox(height: 28.0),
+                  const Text('Email'),
+                  AppTextField(
+                    onChanged: (email) => context
+                        .read<RegisterBloc>()
+                        .add(RegisterEmailChanged(email)),
+                    textInputType: TextInputType.emailAddress,
+                    errorText: state.emailError,
+                    prefixIcon: const Icon(Icons.email),
+                  ),
+                  const SizedBox(height: 28.0),
+                  const Text('Password'),
+                  AppTextField(
+                    onChanged: (password) => context
+                        .read<RegisterBloc>()
+                        .add(RegisterPasswordChanged(password)),
+                    errorText: state.passwordError,
+                    prefixIcon: const Icon(Icons.lock),
+                    textInputAction: TextInputAction.done,
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 28.0),
+                  AppButton(
+                    onPressed: () {
+                      context
+                          .read<RegisterBloc>()
+                          .add(const RegisterSubmitted());
+                    },
+                    inProgress: state.status.isSubmissionInProgress,
+                    enabled: state.status.isValidated,
+                    child: const Text('Register'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -100,7 +104,7 @@ class AppButton extends StatelessWidget {
     Key? key,
     required this.onPressed,
     this.enabled = true,
-    this.inProgress = false,
+    this.inProgress = true,
     required this.child,
   }) : super(key: key);
 
@@ -113,12 +117,8 @@ class AppButton extends StatelessWidget {
         ),
         minimumSize: const Size.fromHeight(44.0),
       ),
-      onPressed: enabled ? onPressed : null,
-      child: inProgress
-          ? CircularProgressIndicator(
-              color: Theme.of(context).colorScheme.onPrimary,
-            )
-          : child,
+      onPressed: enabled && !inProgress ? onPressed : null,
+      child: inProgress ? const CircularProgressIndicator() : child,
     );
   }
 }

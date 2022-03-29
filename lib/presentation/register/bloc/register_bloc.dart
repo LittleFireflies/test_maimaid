@@ -23,14 +23,26 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     on<RegisterPasswordChanged>(
       (event, emit) => _onRegisterPasswordChanged(event, emit),
     );
-    on<RegisterSubmitted>((event, emit) {
-      // final user = User(
-      //   name: event.name,
-      //   email: event.email,
-      //   password: event.password,
-      // );
-      // _registerUser.execute(user);
-    });
+    on<RegisterSubmitted>((event, emit) => _onRegisterSubmitted(emit));
+  }
+
+  void _onRegisterSubmitted(Emitter<RegisterState> emit) {
+    if (state.status.isValidated) {
+      emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+      try {
+        final user = User(
+          name: state.name.value,
+          email: state.email.value,
+          password: state.password.value,
+        );
+        _registerUser.execute(user);
+
+        emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      } catch (e) {
+        emit(state.copyWith(status: FormzStatus.submissionFailure));
+      }
+    }
   }
 
   void _onRegisterNameChanged(
