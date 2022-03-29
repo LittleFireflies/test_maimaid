@@ -26,7 +26,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     on<RegisterSubmitted>((event, emit) => _onRegisterSubmitted(emit));
   }
 
-  void _onRegisterSubmitted(Emitter<RegisterState> emit) {
+  void _onRegisterSubmitted(Emitter<RegisterState> emit) async {
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
@@ -36,11 +36,16 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           email: state.email.value,
           password: state.password.value,
         );
-        _registerUser.execute(user);
+        await _registerUser.execute(user);
 
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
       } catch (e) {
-        emit(state.copyWith(status: FormzStatus.submissionFailure));
+        emit(
+          state.copyWith(
+            status: FormzStatus.submissionFailure,
+            registerError: e.toString(),
+          ),
+        );
       }
     }
   }

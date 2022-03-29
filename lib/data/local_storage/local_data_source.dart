@@ -13,13 +13,13 @@ class UserHive extends LocalDataSource {
   UserHive._(this.userBox);
 
   @override
-  void registerUser(User user) {
+  void registerUser(User user) async {
     final userModel = UserModel(
       name: user.name,
       email: user.email,
       password: user.password,
     );
-    userBox.add(userModel);
+    await userBox.put(user.email, userModel);
   }
 
   factory UserHive.create({required Box<UserModel> userBox}) {

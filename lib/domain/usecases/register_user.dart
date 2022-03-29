@@ -7,6 +7,6 @@ class RegisterUser {
   const RegisterUser(UserRepository repository) : _repository = repository;
 
   Future<void> execute(User user) async {
-    _repository.registerUser(user);
+    await _repository.registerUser(user);
   }
 }

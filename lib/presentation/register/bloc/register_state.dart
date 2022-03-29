@@ -12,6 +12,7 @@ class RegisterState extends Equatable {
   final String? nameError;
   final String? emailError;
   final String? passwordError;
+  final String? registerError;
 
   const RegisterState({
     this.status = FormzStatus.pure,
@@ -21,6 +22,7 @@ class RegisterState extends Equatable {
     this.nameError,
     this.emailError,
     this.passwordError,
+    this.registerError,
   });
 
   RegisterState copyWith({
@@ -31,6 +33,7 @@ class RegisterState extends Equatable {
     String? nameError,
     String? emailError,
     String? passwordError,
+    String? registerError,
   }) {
     return RegisterState(
       status: status ?? this.status,
@@ -40,6 +43,7 @@ class RegisterState extends Equatable {
       nameError: nameError,
       emailError: emailError,
       passwordError: passwordError,
+      registerError: registerError,
     );
   }
 
@@ -52,5 +56,6 @@ class RegisterState extends Equatable {
         nameError,
         emailError,
         passwordError,
+        registerError,
       ];
 }
