@@ -22,7 +22,7 @@ class UserHive extends LocalDataSource {
     userBox.add(userModel);
   }
 
-  factory UserHive.create(Box<UserModel> userBox) {
+  factory UserHive.create({required Box<UserModel> userBox}) {
     return UserHive._(userBox);
   }
 }
