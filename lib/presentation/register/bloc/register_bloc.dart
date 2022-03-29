@@ -24,12 +24,12 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       (event, emit) => _onRegisterPasswordChanged(event, emit),
     );
     on<RegisterSubmitted>((event, emit) {
-      final user = User(
-        name: event.name,
-        email: event.email,
-        password: event.password,
-      );
-      _registerUser.execute(user);
+      // final user = User(
+      //   name: event.name,
+      //   email: event.email,
+      //   password: event.password,
+      // );
+      // _registerUser.execute(user);
     });
   }
 
