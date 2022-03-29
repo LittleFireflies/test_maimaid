@@ -30,18 +30,22 @@ class UserHive extends LocalDataSource {
     }
   }
 
-  factory UserHive.create({required Box<UserModel> userBox}) {
-    return UserHive._(userBox);
-  }
-
   @override
   Future<User> login(String email, password) async {
     final userModel = userBox.get(email);
 
     if (userModel != null) {
-      return userModel.toEntity();
+      if (password == userModel.password) {
+        return userModel.toEntity();
+      } else {
+        throw const LoginFailedException();
+      }
     } else {
       throw const UserNotFoundException();
     }
+  }
+
+  factory UserHive.create({required Box<UserModel> userBox}) {
+    return UserHive._(userBox);
   }
 }

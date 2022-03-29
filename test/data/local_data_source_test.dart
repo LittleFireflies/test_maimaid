@@ -21,23 +21,74 @@ void main() {
     hive = UserHive.create(userBox: userBox);
   });
 
-  test('register new user', () async {
-    // arrange
-    when(() => userBox.get(user.email)).thenReturn(null);
-    when(() => userBox.put(user.email, userModel))
-        .thenAnswer((invocation) => Future.value());
-    // act
-    hive.registerUser(user);
-    // assert
-    verify(() => userBox.put(user.email, userModel));
+  group('register', () {
+    test(
+      'register new user '
+      'when user not exist',
+      () async {
+        // arrange
+        when(() => userBox.get(user.email)).thenReturn(null);
+        when(() => userBox.put(user.email, userModel))
+            .thenAnswer((invocation) => Future.value());
+        // act
+        await hive.registerUser(user);
+        // assert
+        verify(() => userBox.put(user.email, userModel));
+      },
+    );
+
+    test(
+      'throw UserAlreadyExistException '
+      'when email already exist',
+      () {
+        // arrange
+        when(() => userBox.get(user.email)).thenReturn(userModel);
+        // act
+        final call = hive.registerUser(user);
+        // assert
+        expect(() => call, throwsA(isA<UserAlreadyExistException>()));
+      },
+    );
   });
 
-  test('throw UserAlreadyExistException when email already exist', () {
-    // arrange
-    when(() => userBox.get(user.email)).thenReturn(userModel);
-    // act
-    final call = hive.registerUser(user);
-    // assert
-    expect(() => call, throwsA(isA<UserAlreadyExistException>()));
+  group('login', () {
+    test(
+      'return user '
+      'when login success',
+      () async {
+        // arrange
+        when(() => userBox.get(user.email)).thenReturn(userModel);
+        // act
+        final result = await hive.login(user.email, user.password);
+        // assert
+        expect(result, user);
+      },
+    );
+
+    test(
+      'throw UserNotFoundException '
+      'when email incorrect',
+      () async {
+        // arrange
+        when(() => userBox.get(user.email)).thenReturn(null);
+        // act
+        final call = hive.login(user.email, user.password);
+        // assert
+        expect(() => call, throwsA(isA<UserNotFoundException>()));
+      },
+    );
+
+    test(
+      'throw LoginFailedException '
+      'when password incorrect',
+      () async {
+        // arrange
+        when(() => userBox.get(user.email)).thenReturn(userModel);
+        // act
+        final call = hive.login(user.email, 'wrong password');
+        // assert
+        expect(() => call, throwsA(isA<LoginFailedException>()));
+      },
+    );
   });
 }

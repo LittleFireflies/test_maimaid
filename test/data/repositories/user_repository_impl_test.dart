@@ -22,6 +22,9 @@ void main() {
     });
 
     test('register user to local storage', () {
+      // arrange
+      when(() => localDataSource.registerUser(user))
+          .thenAnswer((invocation) => Future.value());
       // act
       repository.registerUser(user);
       // assert

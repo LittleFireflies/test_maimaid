@@ -23,5 +23,7 @@ class UserNotFoundException extends AppException {
 }
 
 class LoginFailedException extends AppException {
-  const LoginFailedException(String message) : super(message);
+  const LoginFailedException(
+      {String message = 'Login failed, please check your password'})
+      : super(message);
 }
