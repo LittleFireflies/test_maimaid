@@ -52,7 +52,13 @@ class RegisterView extends StatelessWidget {
                 ),
                 Text('Email'),
                 TextField(
+                  onChanged: (email) => context
+                      .read<RegisterBloc>()
+                      .add(RegisterEmailChanged(email)),
                   controller: _emailController,
+                  decoration: InputDecoration(
+                    errorText: state.emailError,
+                  ),
                 ),
                 Text('Password'),
                 TextField(

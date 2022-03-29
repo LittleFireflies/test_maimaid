@@ -4,6 +4,7 @@ import 'package:test_maimaid/domain/entities/user.dart';
 import 'package:test_maimaid/domain/usecases/register_user.dart';
 import 'package:test_maimaid/presentation/register/bloc/register_event.dart';
 import 'package:test_maimaid/presentation/register/bloc/register_state.dart';
+import 'package:test_maimaid/presentation/register/models/email.dart';
 import 'package:test_maimaid/presentation/register/models/name.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
@@ -12,17 +13,12 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   RegisterBloc({required RegisterUser registerUser})
       : _registerUser = registerUser,
         super(const RegisterState()) {
-    on<RegisterNameChanged>((event, emit) {
-      final name = Name.dirty(value: event.name);
-
-      emit(
-        state.copyWith(
-          name: name,
-          status: Formz.validate([name]),
-          nameError: name.invalid ? 'Name can not be empty!' : null,
-        ),
-      );
-    });
+    on<RegisterNameChanged>(
+      (event, emit) => _onRegisterNameChanged(event, emit),
+    );
+    on<RegisterEmailChanged>(
+      (event, emit) => _onRegisterEmailChanged(event, emit),
+    );
     on<RegisterSubmitted>((event, emit) {
       final user = User(
         name: event.name,
@@ -31,5 +27,46 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       );
       _registerUser.execute(user);
     });
+  }
+
+  void _onRegisterNameChanged(
+    RegisterNameChanged event,
+    Emitter<RegisterState> emit,
+  ) {
+    final name = Name.dirty(value: event.name);
+
+    emit(
+      state.copyWith(
+        name: name,
+        status: Formz.validate([name, state.email]),
+        nameError: name.invalid ? 'Name can not be empty!' : null,
+      ),
+    );
+  }
+
+  void _onRegisterEmailChanged(
+    RegisterEmailChanged event,
+    Emitter<RegisterState> emit,
+  ) {
+    final email = Email.dirty(value: event.email);
+
+    emit(
+      state.copyWith(
+        email: email,
+        status: Formz.validate([email, state.name]),
+        emailError: _getEmailError(email.error),
+      ),
+    );
+  }
+
+  String? _getEmailError(EmailInputError? error) {
+    switch (error) {
+      case EmailInputError.empty:
+        return 'Email can not be empty!';
+      case EmailInputError.invalidFormat:
+        return 'Email format invalid!';
+      default:
+        return null;
+    }
   }
 }

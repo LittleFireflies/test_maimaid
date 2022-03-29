@@ -13,6 +13,15 @@ class RegisterNameChanged extends RegisterEvent {
   List<Object?> get props => [name];
 }
 
+class RegisterEmailChanged extends RegisterEvent {
+  final String email;
+
+  const RegisterEmailChanged(this.email);
+
+  @override
+  List<Object?> get props => [email];
+}
+
 class RegisterSubmitted extends RegisterEvent {
   final String name;
   final String email;
