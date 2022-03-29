@@ -42,7 +42,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     emit(
       state.copyWith(
         name: name,
-        status: Formz.validate([name, state.email]),
+        status: Formz.validate([name, state.email, state.password]),
         nameError: name.invalid ? 'Name can not be empty!' : null,
       ),
     );
@@ -57,7 +57,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     emit(
       state.copyWith(
         email: email,
-        status: Formz.validate([email, state.name]),
+        status: Formz.validate([email, state.name, state.password]),
         emailError: _getEmailError(email.error),
       ),
     );

@@ -5,7 +5,7 @@ import 'package:test_maimaid/presentation/register/models/name.dart';
 import 'package:test_maimaid/presentation/register/models/password.dart';
 
 class RegisterState extends Equatable {
-  final FormzStatus? status;
+  final FormzStatus status;
   final Name name;
   final Email email;
   final Password password;

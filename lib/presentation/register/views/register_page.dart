@@ -7,6 +7,7 @@ import 'package:test_maimaid/presentation/register/bloc/register_bloc.dart';
 import 'package:test_maimaid/presentation/register/bloc/register_event.dart';
 import 'package:test_maimaid/presentation/register/bloc/register_state.dart';
 import 'package:test_maimaid/utils/widgets/app_text_field.dart';
+import 'package:formz/formz.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({Key? key}) : super(key: key);
@@ -37,8 +38,12 @@ class RegisterView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Register'),
-                Text('Full Name'),
+                Text(
+                  'Register',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 28.0),
+                const Text('Full Name'),
                 AppTextField(
                   onChanged: (name) => context
                       .read<RegisterBloc>()
@@ -46,7 +51,8 @@ class RegisterView extends StatelessWidget {
                   errorText: state.nameError,
                   prefixIcon: const Icon(Icons.person),
                 ),
-                Text('Email'),
+                const SizedBox(height: 28.0),
+                const Text('Email'),
                 AppTextField(
                   onChanged: (email) => context
                       .read<RegisterBloc>()
@@ -55,7 +61,8 @@ class RegisterView extends StatelessWidget {
                   errorText: state.emailError,
                   prefixIcon: const Icon(Icons.email),
                 ),
-                Text('Password'),
+                const SizedBox(height: 28.0),
+                const Text('Password'),
                 AppTextField(
                   onChanged: (password) => context
                       .read<RegisterBloc>()
@@ -65,10 +72,13 @@ class RegisterView extends StatelessWidget {
                   textInputAction: TextInputAction.done,
                   obscureText: true,
                 ),
-                ElevatedButton(
+                const SizedBox(height: 28.0),
+                AppButton(
                   onPressed: () {
                     context.read<RegisterBloc>().add(const RegisterSubmitted());
                   },
+                  inProgress: state.status.isSubmissionInProgress,
+                  enabled: state.status.isValidated,
                   child: const Text('Register'),
                 ),
               ],
@@ -77,5 +87,38 @@ class RegisterView extends StatelessWidget {
         ),
       );
     });
+  }
+}
+
+class AppButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final bool enabled;
+  final bool inProgress;
+  final Widget child;
+
+  const AppButton({
+    Key? key,
+    required this.onPressed,
+    this.enabled = true,
+    this.inProgress = false,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: OutlinedButton.styleFrom(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+        ),
+        minimumSize: const Size.fromHeight(44.0),
+      ),
+      onPressed: enabled ? onPressed : null,
+      child: inProgress
+          ? CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.onPrimary,
+            )
+          : child,
+    );
   }
 }
