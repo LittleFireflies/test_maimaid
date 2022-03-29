@@ -6,6 +6,7 @@ import 'package:test_maimaid/presentation/register/bloc/register_event.dart';
 import 'package:test_maimaid/presentation/register/bloc/register_state.dart';
 import 'package:test_maimaid/presentation/register/models/email.dart';
 import 'package:test_maimaid/presentation/register/models/name.dart';
+import 'package:test_maimaid/presentation/register/models/password.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final RegisterUser _registerUser;
@@ -18,6 +19,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     );
     on<RegisterEmailChanged>(
       (event, emit) => _onRegisterEmailChanged(event, emit),
+    );
+    on<RegisterPasswordChanged>(
+      (event, emit) => _onRegisterPasswordChanged(event, emit),
     );
     on<RegisterSubmitted>((event, emit) {
       final user = User(
@@ -55,6 +59,21 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         email: email,
         status: Formz.validate([email, state.name]),
         emailError: _getEmailError(email.error),
+      ),
+    );
+  }
+
+  void _onRegisterPasswordChanged(
+    RegisterPasswordChanged event,
+    Emitter<RegisterState> emit,
+  ) {
+    final password = Password.dirty(value: event.password);
+
+    emit(
+      state.copyWith(
+        password: password,
+        status: Formz.validate([password, state.name, state.email]),
+        passwordError: password.invalid ? 'Password can not be empty' : null,
       ),
     );
   }

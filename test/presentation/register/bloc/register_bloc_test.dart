@@ -8,6 +8,7 @@ import 'package:test_maimaid/presentation/register/bloc/register_event.dart';
 import 'package:test_maimaid/presentation/register/bloc/register_state.dart';
 import 'package:test_maimaid/presentation/register/models/email.dart';
 import 'package:test_maimaid/presentation/register/models/name.dart';
+import 'package:test_maimaid/presentation/register/models/password.dart';
 
 class MockRegisterUser extends Mock implements RegisterUser {}
 
@@ -38,7 +39,7 @@ void main() {
 
       blocTest<RegisterBloc, RegisterState>(
         'emits email empty error '
-        'when name is empty',
+        'when email is empty',
         build: () => bloc,
         act: (bloc) => bloc.add(const RegisterEmailChanged('')),
         expect: () => [
@@ -60,6 +61,20 @@ void main() {
             status: FormzStatus.invalid,
             email: Email.dirty(value: 'random_email'),
             emailError: 'Email format invalid!',
+          )
+        ],
+      );
+
+      blocTest<RegisterBloc, RegisterState>(
+        'emits password empty error '
+        'when password is empty',
+        build: () => bloc,
+        act: (bloc) => bloc.add(const RegisterPasswordChanged('')),
+        expect: () => [
+          const RegisterState(
+            status: FormzStatus.invalid,
+            password: Password.dirty(value: ''),
+            passwordError: 'Password can not be empty!',
           )
         ],
       );

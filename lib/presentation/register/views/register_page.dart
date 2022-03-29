@@ -62,8 +62,14 @@ class RegisterView extends StatelessWidget {
                 ),
                 Text('Password'),
                 TextField(
+                  onChanged: (password) => context
+                      .read<RegisterBloc>()
+                      .add(RegisterPasswordChanged(password)),
                   controller: _passwordController,
-                  obscureText: true,
+                  // obscureText: true,
+                  decoration: InputDecoration(
+                    errorText: state.passwordError,
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () {
