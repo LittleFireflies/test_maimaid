@@ -13,7 +13,6 @@ void main() {
     late UserRepositoryImpl repository;
 
     const user = TestModels.user;
-    const userModel = TestModels.userModel;
 
     setUp(() {
       localDataSource = MockLocalDataSource();
