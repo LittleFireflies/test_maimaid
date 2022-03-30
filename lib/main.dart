@@ -8,6 +8,7 @@ import 'package:test_maimaid/data/api/interceptors/error_interceptor.dart';
 import 'package:test_maimaid/data/local_storage/local_data_source.dart';
 import 'package:test_maimaid/data/models/user_model.dart';
 import 'package:test_maimaid/data/repositories/user_repository_impl.dart';
+import 'package:test_maimaid/presentation/home/view/home_page.dart';
 import 'package:test_maimaid/presentation/login/view/login_page.dart';
 import 'package:test_maimaid/presentation/register/views/register_page.dart';
 
@@ -60,6 +61,8 @@ class MyApp extends StatelessWidget {
             case RegisterPage.routeName:
               return MaterialPageRoute(
                   builder: (context) => const RegisterPage());
+            case HomePage.routeName:
+              return MaterialPageRoute(builder: (context) => const HomePage());
             default:
               return MaterialPageRoute(builder: (_) {
                 return const Scaffold(

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:test_maimaid/data/repositories/user_repository_impl.dart';
 import 'package:test_maimaid/domain/usecases/login.dart';
+import 'package:test_maimaid/presentation/home/view/home_page.dart';
 import 'package:test_maimaid/presentation/login/bloc/login_bloc.dart';
 import 'package:test_maimaid/presentation/login/bloc/login_event.dart';
 import 'package:test_maimaid/presentation/login/bloc/login_state.dart';
@@ -45,7 +46,7 @@ class LoginView extends StatelessWidget {
             ));
         }
         if (state.status.isSubmissionSuccess) {
-          // TODO: Open Main page
+          Navigator.pushReplacementNamed(context, HomePage.routeName);
         }
       },
       builder: (context, state) {
