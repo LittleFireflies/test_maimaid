@@ -8,7 +8,9 @@ part 'user_data_dto.g.dart';
 class UserDataDto extends Equatable {
   final int id;
   final String email;
+  @JsonKey(name: 'first_name')
   final String firstName;
+  @JsonKey(name: 'last_name')
   final String lastName;
   final String avatar;
 

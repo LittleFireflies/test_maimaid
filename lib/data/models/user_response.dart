@@ -6,10 +6,15 @@ part 'user_response.g.dart';
 
 @JsonSerializable()
 class UserResponse extends Equatable {
+  @JsonKey(name: 'page')
   final int page;
+  @JsonKey(name: 'per_page')
   final int perPage;
+  @JsonKey(name: 'total')
   final int total;
+  @JsonKey(name: 'total_pages')
   final int totalPages;
+  @JsonKey(name: 'data')
   final List<UserDataDto> data;
 
   const UserResponse({
