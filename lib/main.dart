@@ -8,9 +8,11 @@ import 'package:test_maimaid/data/api/interceptors/error_interceptor.dart';
 import 'package:test_maimaid/data/local_storage/local_data_source.dart';
 import 'package:test_maimaid/data/models/user_model.dart';
 import 'package:test_maimaid/data/repositories/user_repository_impl.dart';
+import 'package:test_maimaid/domain/entities/user_data.dart';
 import 'package:test_maimaid/presentation/home/view/home_page.dart';
 import 'package:test_maimaid/presentation/login/view/login_page.dart';
 import 'package:test_maimaid/presentation/register/views/register_page.dart';
+import 'package:test_maimaid/presentation/user_detail/view/user_detail_page.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
@@ -63,6 +65,12 @@ class MyApp extends StatelessWidget {
                   builder: (context) => const RegisterPage());
             case HomePage.routeName:
               return MaterialPageRoute(builder: (context) => const HomePage());
+            case UserDetailPage.routeName:
+              final user = settings.arguments as UserData;
+              return MaterialPageRoute(
+                builder: (context) => UserDetailPage(user: user),
+                settings: settings,
+              );
             default:
               return MaterialPageRoute(builder: (_) {
                 return const Scaffold(

@@ -5,6 +5,7 @@ import 'package:test_maimaid/domain/usecases/load_users.dart';
 import 'package:test_maimaid/presentation/home/bloc/home_bloc.dart';
 import 'package:test_maimaid/presentation/home/bloc/home_event.dart';
 import 'package:test_maimaid/presentation/home/bloc/home_state.dart';
+import 'package:test_maimaid/presentation/user_detail/view/user_detail_page.dart';
 
 class HomePage extends StatelessWidget {
   static const routeName = 'home';
@@ -45,7 +46,11 @@ class HomeView extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: ListTile(
-                      onTap: () {},
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        UserDetailPage.routeName,
+                        arguments: user,
+                      ),
                       leading: Image.network(user.avatar),
                       title: Text('${user.firstName} ${user.lastName}'),
                       subtitle: Text(user.email),
