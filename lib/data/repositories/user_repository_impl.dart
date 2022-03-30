@@ -1,6 +1,7 @@
 import 'package:test_maimaid/data/api/api_service.dart';
 import 'package:test_maimaid/data/local_storage/local_data_source.dart';
 import 'package:test_maimaid/domain/entities/user.dart';
+import 'package:test_maimaid/domain/entities/user_data.dart';
 import 'package:test_maimaid/domain/repositories/user_repository.dart';
 
 class UserRepositoryImpl extends UserRepository {
@@ -21,5 +22,11 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<User> login(String email, String password) async {
     return await _localDataSource.login(email, password);
+  }
+
+  @override
+  Future<List<UserData>> loadUsers() {
+    // TODO: implement loadUsers
+    throw UnimplementedError();
   }
 }
