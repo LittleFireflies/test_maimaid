@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:test_maimaid/data/api/api_service.dart';
 import 'package:test_maimaid/data/local_storage/local_data_source.dart';
 import 'package:test_maimaid/data/repositories/user_repository_impl.dart';
 
@@ -7,9 +8,12 @@ import '../../helpers/models.dart';
 
 class MockLocalDataSource extends Mock implements LocalDataSource {}
 
+class MockRemoteDataSource extends Mock implements RemoteDataSource {}
+
 void main() {
   group('User Repository Impl', () {
     late LocalDataSource localDataSource;
+    late RemoteDataSource remoteDataSource;
     late UserRepositoryImpl repository;
 
     const user = TestModels.user;
@@ -18,7 +22,11 @@ void main() {
 
     setUp(() {
       localDataSource = MockLocalDataSource();
-      repository = UserRepositoryImpl(localDataSource: localDataSource);
+      remoteDataSource = MockRemoteDataSource();
+      repository = UserRepositoryImpl(
+        localDataSource: localDataSource,
+        remoteDataSource: remoteDataSource,
+      );
     });
 
     test('register user to local storage', () {

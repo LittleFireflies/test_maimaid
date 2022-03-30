@@ -1,7 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:test_maimaid/data/api/api_service.dart';
+import 'package:test_maimaid/data/api/interceptors/error_interceptor.dart';
 import 'package:test_maimaid/data/local_storage/local_data_source.dart';
 import 'package:test_maimaid/data/models/user_model.dart';
 import 'package:test_maimaid/data/repositories/user_repository_impl.dart';
@@ -28,9 +31,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const defaultTimeoutInSeconds = 60 * 1000;
+    final dio = Dio(
+      BaseOptions(
+        connectTimeout: defaultTimeoutInSeconds,
+        receiveTimeout: defaultTimeoutInSeconds,
+        sendTimeout: defaultTimeoutInSeconds,
+      ),
+    );
+    dio.interceptors.add(ErrorInterceptor());
+
     return RepositoryProvider(
       create: (context) => UserRepositoryImpl(
         localDataSource: dataSource,
+        remoteDataSource: ApiService(dio),
       ),
       child: MaterialApp(
         title: 'Flutter Demo',

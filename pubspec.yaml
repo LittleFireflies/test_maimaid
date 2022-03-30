@@ -40,6 +40,7 @@ dependencies:
   formz: ^0.4.1
   google_fonts: ^2.3.1
   json_annotation: ^4.4.0
+  dio: ^4.0.5
 
 dev_dependencies:
   flutter_test:
