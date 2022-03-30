@@ -25,8 +25,9 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<List<UserData>> loadUsers() {
-    // TODO: implement loadUsers
-    throw UnimplementedError();
+  Future<List<UserData>> loadUsers() async {
+    final userResponse = await _remoteDataSource.getUsers();
+
+    return userResponse.data.map((userData) => userData.toEntity()).toList();
   }
 }

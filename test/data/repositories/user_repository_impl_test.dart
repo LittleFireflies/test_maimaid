@@ -19,6 +19,7 @@ void main() {
     const user = TestModels.user;
     final email = user.email;
     final password = user.password;
+    const userResponse = TestModels.userResponse;
 
     setUp(() {
       localDataSource = MockLocalDataSource();
@@ -47,6 +48,17 @@ void main() {
       repository.login(email, password);
       // assert
       verify(() => localDataSource.login(email, password)).called(1);
+    });
+
+    test('load users data from remote data source', () async {
+      // arrange
+      when(() => remoteDataSource.getUsers())
+          .thenAnswer((_) async => userResponse);
+      // act
+      final result = await repository.loadUsers();
+      // assert
+      expect(result, [TestModels.userData]);
+      verify(() => remoteDataSource.getUsers()).called(1);
     });
   });
 }
